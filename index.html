@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Food Ordering App</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <h1>Food Ordering App</h1>
+    <div class="menu">
+        <h2>Menu</h2>
+        <!-- Dishes will be dynamically loaded here -->
+    </div>
+    
+    <div class="cart">
+        <h2>Cart</h2>
+        <ul id="cart-items"></ul>
+        <p>Total: <span id="cart-total">$0.00</span></p>
+        <button id="place-order">Place Order</button>
+    </div>
+    
+    <div class="tables">
+        <h2>Select a Table</h2>
+        <select id="table-select">
+            <option value="1">Table 1</option>
+            <option value="2">Table 2</option>
+            <option value="3">Table 3</option>
+        </select>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const menu = document.querySelector(".menu");
+    const cartItems = document.getElementById("cart-items");
+    const cartTotal = document.getElementById("cart-total");
+    const placeOrderBtn = document.getElementById("place-order");
+    const tableSelect = document.getElementById("table-select");
+    let cartData = [];
+
+    // Sample dishes (you can load dishes from an API)
+    const dishes = [
+{ id: 1, name: "Dish 1", price: 10.99, image: "dish1.jpg" },
+{ id: 2, name: "Dish 2", price: 12.99, image: "dish2.jpg" },
+{ id: 3, name: "Dish 3", price: 9.99, image: "dish3.jpg" },
+{ id: 4, name: "Dish 4", price: 10.99, image: "dish4.jpg" },
+{ id: 5, name: "Dish 5", price: 12.99, image: "dish5.jpg" },
+{ id: 6, name: "Dish 6", price: 9.99, image: "dish6.jpg" },
+// Add more dishes here
+];
+
+
+    // Function to populate the menu with dishes
+    // Function to populate the menu with dishes
+function populateMenu() {
+menu.innerHTML = '<h2>Menu</h2>';
+dishes.forEach(dish => {
+const menuItem = document.createElement("div");
+menuItem.classList.add("menu-item");
+menuItem.innerHTML = `
+    <img src="${dish.image}" alt="${dish.name}">
+    <p>${dish.name}</p>
+    <p>$${dish.price.toFixed(2)}</p>
+    <button class="add-to-cart" data-id="${dish.id}">Add to Cart</button>
+`;
+menu.appendChild(menuItem);
+});
+}
+
+
+    // Event listener for adding items to the cart
+    menu.addEventListener("click", function (e) {
+        if (e.target.classList.contains("add-to-cart")) {
+            const dishId = parseInt(e.target.getAttribute("data-id"));
+            const dish = dishes.find(item => item.id === dishId);
+
+            if (dish) {
+                cartData.push({ ...dish, quantity: 1 });
+                updateCart();
+            }
+        }
+    });
+
+    // Event listener for editing items in the cart (update quantity)
+    cartItems.addEventListener("click", function (e) {
+        if (e.target.classList.contains("edit-item")) {
+            const index = parseInt(e.target.getAttribute("data-index"));
+            const newQuantity = parseInt(prompt("Enter new quantity:"));
+            if (!isNaN(newQuantity) && newQuantity >= 0) {
+                cartData[index].quantity = newQuantity;
+                updateCart();
+            }
+        }
+    });
+
+    // Event listener for removing items from the cart
+    cartItems.addEventListener("click", function (e) {
+        if (e.target.classList.contains("remove-item")) {
+            const index = parseInt(e.target.getAttribute("data-index"));
+            cartData.splice(index, 1);
+            updateCart();
+        }
+    });
+
+    // Event listener for placing an order
+    placeOrderBtn.addEventListener("click", function () {
+        const tableNumber = tableSelect.value;
+        const totalAmount = calculateTotalAmount();
+        alert(`Order placed for Table ${tableNumber}. Total Amount: $${totalAmount.toFixed(2)}`);
+
+        // Prepare the order data
+        const orderData = {
+            table: tableNumber,
+            items: cartData,
+            timestamp: new Date().toLocaleString()
+        };
+
+        // Send the order data to CrudCrud (Replace with your API URL)
+        const crudCrudBaseUrl = 'https://crudcrud.com/api/ce95e1a52e0f4f0fba77b7de5bf5f9d6';
+        axios.post(`${crudCrudBaseUrl}/orders`, orderData)
+            .then((response) => {
+                console.log('Order data sent successfully:', response.data);
+            })
+            .catch((error) => {
+                console.error('Error sending order data:', error);
+            });
+
+        // Clear the cart and update the display
+        cartData = [];
+        updateCart();
+    });
+
+    // Function to update the cart display
+    function updateCart() {
+        cartItems.innerHTML = "";
+        let total = 0;
+        cartData.forEach((item, index) => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            cartItems.innerHTML += `
+                <li>
+                    ${item.name} - $${item.price.toFixed(2)} x ${item.quantity} = $${itemTotal.toFixed(2)}
+                    <button class="edit-item" data-index="${index}">Edit</button>
+                    <button class="remove-item" data-index="${index}">Remove</button>
+                </li>
+            `;
+        });
+        cartTotal.textContent = `$${total.toFixed(2)}`;
+    }
+
+    // Function to calculate the total amount in the cart
+    function calculateTotalAmount() {
+        return cartData.reduce((total, item) => {
+            return total + (item.price * item.quantity);
+        }, 0);
+    }
+
+    // Populate the menu
+    populateMenu();
+});
+    </script>
+</body>
+</html>

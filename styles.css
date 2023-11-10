@@ -1,0 +1,110 @@
+/* Resetting default margin and padding for all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body background image */
+body {
+    background-image: url('backs.jpg'); /* Replace 'back.jpg' with your image file path */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif; /* Set a common font for the entire page */
+}
+
+/* Header styles */
+h1 {
+    text-align: center;
+    padding: 20px;
+    color: #333;
+}
+
+/* Menu styles */
+.menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.menu-item {
+    border: 1px solid #ccc;
+    margin: 10px;
+    padding: 10px;
+    max-width: 300px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item img {
+    max-width: 100%;
+    height: auto;
+}
+
+.menu-item p {
+    font-size: 18px;
+}
+
+.menu-item button {
+    background-color: #0074cc;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.menu-item button:hover {
+    background-color: #00529b;
+}
+
+/* Cart styles */
+#cart {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    max-width: 300px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Table select styles */
+#table-select {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+/* Place Order button styles */
+#place-order {
+    background-color: #0074cc;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 18px;
+    margin: 10px;
+}
+
+/* Table styles */
+.tables {
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+#place-order:hover {
+    background-color: #00529b;
+}
